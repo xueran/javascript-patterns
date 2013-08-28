@@ -6,7 +6,7 @@
 <body>
 	<script type="text/javascript">
 		
-		//单一var模式
+		// 单一var模式
 
 		function func () {
 			var a = 1,
@@ -16,13 +16,13 @@
 				i,
 				j;
 
-			//函数体
+			// 函数体
 		}
 
 
-		//提升：零散变量问题
+		// 提升：零散变量问题
 
-		//反模式
+		// 反模式
 
 		myname = "global";	//全局
 		function func (){
@@ -32,9 +32,9 @@
 		}
 		func();
 
-		//原因：变量声明提前，而变量定义却没有提前
+		// 原因：变量声明提前，而变量定义却没有提前
 
-		//以上代码等同于以下代码:
+		// 以上代码等同于以下代码:
 
 		myname = "global";	//全局
 		function func (){

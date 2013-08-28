@@ -5,23 +5,21 @@
 </head>
 <body>
 	<script type="text/javascript">
-		//for 循环
+		// for 循环
 
-		//次优循环
+		// 次优循环
 		for (var i = 0; i < myarray.length; i++) {
-			//对myarray[i]进行处理
+			// 对myarray[i]进行处理
 		}
 
 
-		//优化1：学会缓存length，尤其对于dom操作
-
+		// 优化 1：学会缓存length，尤其对于dom操作
 		for(var i = 0,max = myarray.length; i < max; i++){
 			// 对myarray[i]进行处理
 		}
 
 
-		//优化2: 单一var模式，保持一致性
-
+		// 优化 2: 单一var模式，保持一致性
 		var i = 0,
 			max,
 			myarray = [];
@@ -31,18 +29,18 @@
 			}
 
 
-		//优化3：用i += 1代替i ++
-
+		//优化 3：用 i += 1 代替 i++
 		for(max = myarray; i < max; i += 1){
-				//...
+				// ...
 		}
 
-		//细微操作：
-		//使用最少的变量
-		//逐步减至0，同0比较总比同数组长度比较或者非0数组比较更有效率
+		/*
+		* 细微操作：
+		* 使用最少的变量
+		* 逐步减至0，同0比较总比同数组长度比较或者非0数组比较更有效率
+		*/
 
-		//修改1
-
+		// 修改 1
 		var i,myarray = [];
 
 		for (i = myarray.length; i--;) {
@@ -50,8 +48,7 @@
 		}
 
 
-		//修改2
-
+		// 修改 2
 		var myarray = [],
 		 	i = myarray.length;
 

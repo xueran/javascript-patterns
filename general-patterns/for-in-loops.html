@@ -15,8 +15,8 @@
 			heads: 1
 		};
 
-		//代码其他部分
-		//将一个方法添加到所有对象上
+		// 代码其他部分
+		// 将一个方法添加到所有对象上
 		if (typeof Object.prototype.clone === "undefined") {
 			Object.prototype.clone = function() {
 				//...	
@@ -24,8 +24,8 @@
 		}
 
 
-		//1.
-		//for-in循环
+		// 1.
+		// for-in循环
 		for (var i in man) {
 			if (man.hasOwnProperty(i)) {   //过滤
 				console.log(i, ":", man[i]);
@@ -39,9 +39,9 @@
 		*/
 
 
-		//2.
-		//反模式
-		//不使用hasOwnProperty进行检查后使用for-in循环的结果
+		// 2.
+		// 反模式
+		// 不使用hasOwnProperty进行检查后使用for-in循环的结果
 		for (var i in man) {
 			console.log(i, ":", man[i]);
 		}
@@ -54,8 +54,8 @@
 		*/
 
 
-		//3. 
-		//在Object.prototype中调用hasOwnProperty
+		// 3. 
+		// 在Object.prototype中调用hasOwnProperty
 		for (var i in man) {
 			if (Object.prototype.hasOwnProperty.call(man, i)) { // filter
 				console.log(i, ":", man[i]);
@@ -63,8 +63,8 @@
 		}
 
 
-		//4.
-		//使用本地变量存储较长的属性名
+		// 4.
+		// 使用本地变量存储较长的属性名
 		var i,
 			hasOwn = Object.prototype.hasOwnProperty;
 		for (i in man) {
