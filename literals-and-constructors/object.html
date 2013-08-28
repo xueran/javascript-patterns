@@ -1,0 +1,51 @@
+<html>
+<head>
+	<title>javascript patterns</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<script type="text/javascript">
+
+		// 对象字面量
+
+		// 方法 1，使用对象字面量
+		var car = {
+			goes: "far"
+		};
+
+
+		// 反模式，使用内置构造函数
+		var car = new Object();
+		car.goes = "far";
+
+
+		/* 推荐使用对象字面量来创建对象，原因：
+		* 字面量强调该对象是一个可变的哈希映射，而不是从对象中提取的属性和方法
+		* 字面量没有作用域的解析
+		* 因为可能以同样的名字创建了一个局部构造函数，所以解释器需要从调用Object()的位置开始一直向上查找，直到找到全局的object构造函数
+		*/
+
+
+		// 对象构造函数捕捉
+		// Object构造函数仅接受一个参数，并且依赖传递的值，该object可能会委派另一个内置构造函数来创建对象
+
+
+		// 一个空对象
+		var o = new Object();
+		console.log(o.constructor === Object);	// true
+
+		// 一个数值对象
+		var o = new Object(1);
+		console.log(o.constructor === Number);	// true
+
+		// 一个字符串对象
+		var o = new Object("string");
+		console.log(o.constructor ==== String);	 // true
+
+		// 一个布尔对象
+		var o = new Object(true);
+		console.log(o.constructor === Boolean);	 // true
+
+	</script>
+</body>
+</html>
