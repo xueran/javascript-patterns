@@ -1,0 +1,66 @@
+<html>
+<head>
+	<title>javascript patterns</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<script type="text/javascript">
+		//for 循环
+
+		//次优循环
+		for (var i = 0; i < myarray.length; i++) {
+			//对myarray[i]进行处理
+		}
+
+
+		//优化1：学会缓存length，尤其对于dom操作
+
+		for(var i = 0,max = myarray.length; i < max; i++){
+			// 对myarray[i]进行处理
+		}
+
+
+		//优化2: 单一var模式，保持一致性
+
+		var i = 0,
+			max,
+			myarray = [];
+
+			for(max = myarray; i < max; i++){
+				//...
+			}
+
+
+		//优化3：用i += 1代替i ++
+
+		for(max = myarray; i < max; i += 1){
+				//...
+		}
+
+		//细微操作：
+		//使用最少的变量
+		//逐步减至0，同0比较总比同数组长度比较或者非0数组比较更有效率
+
+		//修改1
+
+		var i,myarray = [];
+
+		for (i = myarray.length; i--;) {
+			// myarray[i]
+		}
+
+
+		//修改2
+
+		var myarray = [],
+		 	i = myarray.length;
+
+		 while(i--){
+		 	// myarray[i]
+		 }
+
+
+
+	</script>
+</body>
+</html>

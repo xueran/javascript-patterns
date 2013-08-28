@@ -1,0 +1,50 @@
+<html>
+<head>
+	<title>javascript pattern</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<script type="text/javascript">
+		
+		//单一var模式
+
+		function func () {
+			var a = 1,
+				b = 2,
+				sum = a + b,
+				myobject = {},
+				i,
+				j;
+
+			//函数体
+		}
+
+
+		//提升：零散变量问题
+
+		//反模式
+
+		myname = "global";	//全局
+		function func (){
+			alert(myname);	//undefined
+			var myname = "local";
+			alert(myname);	//local
+		}
+		func();
+
+		//原因：变量声明提前，而变量定义却没有提前
+
+		//以上代码等同于以下代码:
+
+		myname = "global";	//全局
+		function func (){
+			var myname;
+			alert(myname);	//undefined
+			myname = "local";
+			alert(myname);	//local
+		}
+		func();
+
+	</script>
+</body>
+</html>
