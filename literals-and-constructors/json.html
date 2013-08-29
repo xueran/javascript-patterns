@@ -1,0 +1,64 @@
+<html>
+<head>
+	<title>javascript patterns</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<script type="text/javascript">
+	
+		// title：json
+
+		// 一个json字符串
+		var jstr = '{"mkey": "my value"}';
+
+		// json字符串转化成对象
+
+		// 反模式
+		var data = eval('(' +jstr + ')');
+
+		// 优先使用的模式
+		var data = JSON.parse(jstr);	// Object {mkey: "my value"}
+		console.log(data.mykey);	// my value
+
+
+		// JSON.stringify 将任意对象和数组转化成json字符串
+		var dog = {
+			name: 'Fido',
+			dob: new Date(),
+			legs: [1, 2, 3, 4]
+		};
+		var jsonstr =JSON.stringify(dog);
+		console.log(jsonstr);	
+		// "{"name":"Fido","dob":"2013-08-29T02:08:17.837Z","legs":[1,2,3,4]}"
+
+
+		// 没有 json对象这回事
+		/*
+		* 很多人错误地把JavaScript对象字面量（Object Literals）称为JSON对象（JSON Objects），但是
+		* JSON只是一个数据交换语言，只有我们将之用在string上下文的时候它才叫JSON
+		*/
+
+		// JSON有非常严格的语法
+		/* 在string上下文里{ "prop": "val" } 是个合法的JSON，但{ prop: "val" }和{ 'prop': 'val' }确实不合法的
+		* 所有属性名称和它的值都必须用双引号引住，不能使用单引号
+		* 另外，即便你用了转义以后的单引号也是不合法的
+		* 在JSON中，不能使用函数或者正则字面量
+		*/
+
+		// 这是JSON字符串
+		var foo = '{ "prop": "val" }';
+		 
+		// 这是对象字面量,属性名只有在不是合法的标识符才使用引号，例如属性名包含空格'first name'
+		var bar = { "prop": "val" };
+		var bar2 = { prop: "val" };
+
+		// 总结：对象字面量不是JSON对象，但是有真正的JSON对象。但是两者完全不一样概念，在新版的浏览器里JSON对象已经被原生的内置对象了，目前有2个静态方法：
+		// JSON.parse用来将JSON字符串反序列化成对象，JSON.stringify用来将对象序列化成JSON字符串
+
+
+		// http://json.org/
+		// http://www.json.org/js.html
+
+	</script>
+</body>
+</html>

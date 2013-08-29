@@ -1,0 +1,61 @@
+<html>
+<head>
+	<title>javascript patterns</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<script type="text/javascript">
+
+		// title：数组字面量
+
+		// 反模式
+		var a = new Array('itsy', 'bitsy', 'spider');
+
+		// 完全相同的数组，字面量
+		var a = ['itsy', 'bitsy', 'spider'];
+
+		console.log(a.constructor === Array);	// true
+
+		// 具有一个元素的数组
+		var a = [3];
+		console.log(a.length);	// 1
+		console.log(a[0]);	// 3
+
+		// 具有三个元素的数组
+		var a = new Array(3);
+		console.log(a.length);	// 3
+		console.log(a[0]);	// undefined
+
+		// 当使用构造函数时，传递单个数字时，并不是数组的第一个元素，而是数组的长度
+
+		var a = new Array(3.14);	// RangeError: invalid aray length
+
+
+
+		// 检查数组性质
+
+		/*
+		* 使用typeof检查，返回的是obje
+		* 使用instanceof检查，在某些IE版本的不同框架中不正确
+		*/
+
+		// ECMAScript5 定义了新方法Array.isArray()
+		Array.isArray([]);	// true
+		Array.isArray({
+			length: 1,
+			"0": 2,
+			slice: function () {}
+		});	// false
+
+
+		// 实现isArray()
+		if (typeof Array.isArray === "undefined") {
+			Array.isArray = function (arg) {
+				// 如果在数组的上下文环境中，返回的是[object Array]，如果该上下文是一个对象，返回的是[object Object]
+				return Object.prototype.toString.call(arg) === "[object Array]";
+			};
+		}
+
+	</script>
+</body>
+</html>

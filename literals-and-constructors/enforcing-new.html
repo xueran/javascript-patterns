@@ -1,0 +1,95 @@
+<html>
+<head>
+	<title>javascript patterns</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<script type="text/javascript">
+
+		// title：强制new模式
+
+		// 构造函数
+		var Waffle = function () {
+			this.tastes = 'yummy';
+		};
+
+		// 定义一个新对象
+		var good_morning = new Waffle();
+		console.log(typeof good_morning);	// "object"
+		console.log(good_morning.tastes);	// "yummy"
+
+		// 反模式
+		var good_morning = Waffle();
+		console.log(typeof good_morning);	// "undefined"
+		console.log(window.tastes);	// "yummy"
+
+		/*
+		* 分析：当使用new操作符时，函数内部将会以下情况
+		* 创建一个空对象并用this引用该对象，同时还继承了该函数的原型
+		* 属性和方法添加到this引用的对象中
+		* 隐式返回this
+		*/
+
+		var Waffle = function () {
+
+			// 创建新对象
+			// var this = {};
+
+			this.tastes = 'yummy';
+
+			// return this;  隐式返回this
+		};
+
+		// 所以不使用new操作符时，不会创建新对象，也不会返回this，里面的this默认是指向的是window对象，属性和方法添加到window对象
+
+
+		// 使用that
+		function Waffle (){
+			var that = {};
+
+			that.tastes = "yummy";
+
+			return that;
+		}
+
+		// 简单对象，使用字面量
+		function Waffle (){
+			return {
+				tastes: "yummy"
+			};
+		}
+
+		var first = new Waffle(),
+			second = Waffle();
+		console.log(first.tastes);	//"yummy"
+		console.log(second.tastes);	//"yummy"
+
+
+		// 自调用构造函数
+		function Waffle () {
+
+			if (!(this instanceof Waffle)) {
+				return new Waffle();
+			}
+
+			this.tastes = "yummy";
+		}	
+
+		Waffle.prototype.wantAnother = true;
+
+		var first = new Waffle(),
+			second = Waffle();
+		console.log(first.tastes);	//"yummy"
+		console.log(second.tastes);	//"yummy"
+		console.log(first.wantAnother);	// true
+		console.log(second.wantAnother);	// true
+
+		// 使用argument.callee代替硬编码
+
+		if (!(this instanceof Waffle)) {
+			return new argument.callee();
+		}
+		
+	</script>
+</body>
+</html>
