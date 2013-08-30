@@ -1,0 +1,58 @@
+<html>
+<head>
+	<title>javascript patterns</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<script type="text/javascript">
+
+		// title: 自定义回调函数
+
+		var scareMe = function () {
+			alert('Boo!');
+			scareMe = function () {
+				alert('Double Boo!');
+			};
+		};
+
+		// 使用自定义函数
+		scareMe();	// Boo!
+		scareMe();	// Double boo!
+		
+		/**
+		 * 当函数有一些初始化的工作要做，并且仅需要一次时这种模式就很用
+		 * 如果该函数使用了不同的名称，比如分配给不同的变量或者以对象的方法来使用，重新定义不会发生
+		 */
+		
+		// 1. 添加新属性
+		scareMe.property = 'property';
+
+		// 2. 赋值给另一个不同名称的变量
+		var prank = scareMe;
+
+		// 3. 作为一个方法使用
+		var spooky = {
+			boo: scareMe
+		};
+
+
+		prank();	// Boo!
+		prank();	// Boo!
+		console.log(prank.property);	// properly
+
+		spooky.boo();	// Boo!
+		spooky.boo();	// Boo!
+		console.log(spooky.boo.property);	// property
+
+		scareMe();	// Double Boo!
+		scareMe();	// Double Boo!
+		console.log(scareMe.property);	// undefined
+
+		/**
+		 * 当函数赋值给新的变量prank时，新变量保留了函数的引用，此后如果修改scareMe，只是让它引用了新的函数，但是prank仍然引用着旧函数
+		 * 每次调用prank时，它都通知'Boo！'消息，同时覆盖全局scareMe()函数，但是prank()自身保持了可见旧函数
+		 */
+
+	</script>
+</body>
+</html>

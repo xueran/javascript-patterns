@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>javascript patterns</title>
+</head>
+<body>
+	<script>
+
+		// 及时函数
+		
+		(function () {
+			alert('watch out');
+		}());
+
+		// 第二种语法
+		(function () {
+			alert('watch out');
+		})();
+
+		// 参数
+		(function (who, when) {
+			console.log('I met ' + who + 'on' + when);
+		}('Joe Black', new Date()));
+
+		(function (global) {
+			// 通过global访问全局对象
+		}(this));
+
+		// 返回值
+		var result = (function () {
+			return 2 + 2;
+		}());
+		
+		
+	</script>
+</body>
+</html>

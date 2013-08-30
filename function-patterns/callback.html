@@ -1,0 +1,121 @@
+<html>
+<head>
+	<title>javascript patterns</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<script type="text/javascript">
+
+		// title: 回调函数
+
+
+		// 传统实现方法
+		var findNodes = function () {
+			var i = 10000,
+				nodes = [],
+				found;
+			while(i){
+				i -= 1;
+				// 这里是复杂的逻辑
+
+				nodes.push(found);
+			}
+			return nodes;
+		};
+		var hide = function (node) {
+			var i = 0, max = node.length;
+			for(;i < max; i += 1){
+				node[i].style.display = 'none';
+			}
+		};
+
+		// 执行函数
+		hide(findNodes());
+
+
+		// 用回调函数实现
+		var findNodes = function (callback) {
+			var i = 10000,
+				nodes = [],
+				found;
+
+			// 检查回调函数是否为可调用的
+			if (typeof callback !== "function") {
+				callback = false;
+			}
+
+			while(i){
+				i -= 1;
+				// 这里是复杂的逻辑
+
+				// 运行回调函数
+				if (callback) {
+					callback(found);
+				}
+				nodes.push(found);
+			}
+			return nodes;
+		};
+
+		// 回调函数
+		var hide = function (node) {
+			node.style.display = 'none';
+		};
+
+		findNodes(hide);
+
+
+		// 传递一个匿名的回调函数
+		findNodes(function(node){
+			node.style.display = 'none';
+		});
+
+
+		// 回调函数与作用域
+		// 当回调函数对象的方法时,如果该回调函数使用this来引用它所属的对象,上面的方法就会有问题
+		var myapp = {};
+		myapp.color = 'green';
+		myapp.paint = function (node) {
+			node.style.color = this.color;
+		};
+		var findNodes = function (callback) {
+			// ...
+			callback(found);
+			// ...
+		};
+		// 由于findNodes是一个全局函数，所以this引用了全局对象
+
+		// 解决方案，传递回调函数所属的对象
+		findNodes(myapp.paint, myapp);
+
+		var findNodes = function (callback, callback_obj){
+			// ..
+
+			if (typeof callback ==="function") {
+				callback.call(callback_obj, found);
+			}
+			
+			// ...
+		};
+
+		// 方案 2, 将其中的回调函数作为字符串传递
+		findNodes('paint', myapp);
+
+		// 修改findNodes
+		var findNodes = function (callback, callback_obj) {
+			
+			if (typeof callback === "string") {
+				callback = callback_obj[callback];
+			}
+
+			// ...
+			if (typeof callback ==="function") {
+				callback.call(callback_obj, found);
+			}
+
+			// ...
+		};
+
+	</script>
+</body>
+</html>
