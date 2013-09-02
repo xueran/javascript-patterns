@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>javascript patterns</title>
+</head>
+<body>
+	
+	<script>
+
+	// title：配置对象
+	
+
+	function addPerson (first, last, dob, gender, address) {
+		// ...
+	}
+
+	// 调用
+	addPerson('Bruce', 'Wayne', new Date(), null, null, 'batman');
+
+	// 使用配置对象
+	var conf = {
+		username: 'batman',
+		first: 'Bruce',
+		last: 'Wayne'
+	};
+	addPerson(conf);
+
+	/**
+	 * 优点：
+	 * 不需要记住众多参数以及顺序
+	 * 可以安全的忽略可选参数
+	 * 易阅读和维护
+	 * 易于添加和删除参数
+	 */
+	
+	/**
+	 * 缺点：
+	 * 需要记住参数名称
+	 * 属性名称无法被压缩
+	 */
+	
+	</script>
+</body>
+</html>

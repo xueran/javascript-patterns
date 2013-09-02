@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>javascript patterns</title>
+</head>
+<body>
+	<script>
+
+	// title: 柯西化
+	
+	// 1. 函数应用
+	
+	var sayHi = function(who) {
+		return 'Hello' + (who ? ', ' + who : '') + '!';
+	};
+
+	// 调用函数
+	sayHi();	// Hello
+	sayHi('world');	// Hello World
+
+	// 应用函数
+	sayHi.apply(null, ['hello']);	// Hello, hello!
+
+	// 对象的方法
+	var alien = {
+		sayHi: function(who) {
+			return 'Hello' + (who ? ', ' + who : '') + '!';	
+		}
+	};
+	alien.sayHi('world');	// Hello, world
+	sayHi.apply(alien, ['humans']);	// Hello, humans
+
+	// 2. 部分应用
+	
+	// 只传递部分参数
+	var add = function(x, y) {
+		return x + y;
+	};
+	var newadd = add.partialApply(null, [5]);	// 提供一个新函数
+	newadd.apply(null, [4]);	// 9
+
+	// curry化：使函数理解并处理部分应用的过程
+	
+	function add (x, y) {
+		if (typeof y === 'undefined') {
+			return function(y) {
+				return x + y;
+			};
+		}
+		return x + y;
+	}
+
+	// test
+	typeof(add(5));	// function
+	add(3)(4);	// 7
+	var add2000 = add(2000);
+	add2000(10);	// 2010
+
+	// 通用curry化函数
+	function schofinkelize (fn) {
+		var slice = Array.prototype.slice,
+			stored_args = slice.call(arguments, 1);	// 剥离第一个参数fn
+		return function() {
+			var new_args = slice.call(arguments),
+				args = stored_args.concat(new_args);	// 当新函数被调用时，原有的部分应用参数stored_args合并到新参数new_args
+
+			return fn.apply(null, args);	// 将所有参数应用到原始函数fn中
+		};
+	}
+
+	// test
+	function add (x, y) {
+		return x + y;
+	}
+
+	var newadd = schofinkelize(add, 5);	// 将一个函数curry化得到一个新函数
+	newadd(4);	// 9
+
+	// 直接地调用新函数
+	schofinkelize(add, 6)(7);	// 13
+
+
+	// 多个参数
+	function add (a, b, c, d, e) {
+		return a + b + c + d + e;
+	}
+
+	schofinkelize(add, 1, 2, 3)(4, 5);	// 16
+
+	// 两步curry化
+	var addOne = schofinkelize(add, 1);
+	addOne(10, 10, 10, 10);	// 41
+	var addSix = schofinkelize(addOne, 2, 3);
+	addSix(5, 5);	// 16
+
+
+
+	// 何时使用curry化
+	/**
+	 * 当发现正在调用同一个函数，，并且传递的参数大部分都是相同的，那么该函数可能是用于Curry化的一个很好的候选参数
+	 */
+	
+	</script>
+</body>
+</html>

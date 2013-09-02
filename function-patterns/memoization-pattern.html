@@ -9,7 +9,37 @@
 
 		// title: 备忘模式
 		
-		
+
+		var myFunc = function(param) {
+			if (!myFunc.cache[param]) {
+				var result = {};
+				// 开销很大的操作
+				myFunc.cache[param];
+			}
+			return myFunc.cache[param];
+		};
+
+		// 缓存存储
+		myFunc.cache = {};
+
+		// 参数有很多时，将参数序列化成json字符串
+		var myFunc = function() {
+			var cacheKey = JSON.stringify(Array.prototype.slice.call(arguments)),
+				result,
+				f = arguments.callee;
+
+			if (!f.cache[cacheKey]) {
+				result = {};
+				// 开销很大的操作
+				f.cache[cacheKey] = result;
+			}
+			return f.cache[cacheKey];
+		};
+
+		// 缓存存储
+		myFunc.cache = {};
+
+
 	</script>
 </body>
 </html>
