@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Javascript patterns</title>
+</head>
+<body>
+	<script>
+		// title: 揭示模式
+		
+		var myarray;
+		(function() {
+			var astr = "[object Array]",
+				toString = Object.prototype.toString;
+
+			function isArray (a) {
+				return toString.call(a) === astr;
+			}
+
+			function indexOf (haystack, needle) {
+				var i = 0,
+					max = haystack.length;
+				for(; i < max; i += 1){
+					if (haystack[i] === needle) {
+						return i;
+					}
+				}
+				return -1;
+			}
+
+			myarray = {
+				isArray: isArray,
+				indexOf: indexOf,
+				inArray: indexOf
+			};
+
+		})();
+
+		myarray.isArray([1, 2]);	// true
+		myarray.isArray({0:1});		// false
+		myarray.indexOf(["a", "b", "z"], "z");	// 2
+		myarray.inArray(["a", "b", "z"], "z");	// 2
+
+		// 如果发生了意外，例如公共的indexOf方法发生意外，私有的indexOf方法仍然是安全的
+		myarray.indexOf = null;
+		myarray.inArray(["a", "b", "z"], "z");	// 2
+
+	</script>
+</body>
+</html>

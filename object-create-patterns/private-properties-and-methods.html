@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Javascript patterns</title>
+</head>
+<body>
+	<script>
+
+		// title: 私有属性和方法
+
+		// 使用构造函数
+		function Gadget () {
+			// 私有成员
+			var name = 'ipod';
+			// 公有函数
+			this.getName = function() {
+				return name;
+			};
+		}
+		var toy = new Gadget();
+		console.log(toy.name);	// undefined
+		console.log(toy.getName);	// ipod
+
+
+		// 使用对象字面量
+		var myobj; // 这将会是一个对象
+		(function () {
+			// 私有成员
+			var name = "my, oh my";
+
+			myobj = {
+				// 特权方法
+				getName:function () {
+					return name;
+				}
+			};
+		}());
+		myobj.getName();	// my, oh my
+
+	</script>
+</body>
+</html>

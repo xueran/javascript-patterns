@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Javascript patterns</title>
+</head>
+<body>
+	<script>
+		// title: 沙箱模式
+		
+		/**
+		 * 在命名空间模式中，有一个全局对象，在沙箱模式中，则是一个全局构造函数Sandbox。
+		 * 可以使用该构造函数创建对象并且还可以传递回调函数，它变成了代码的隔离沙箱运行环境
+		 */
+		new Sandbox(function(box) {
+			// 代码...
+		});
+
+		/**
+		 * 向该模式添加两个新特性：
+		 * 通过强制new模式，可以假设在创建对象时不需要new操作符
+		 * Sandbox构造函数可以接受一个额外的配置参数（或多个参数），其中该参数指定了对象实例所需要的模块名
+		 */
+		
+		// 例如：
+		Sandbox(['ajax', 'event'], function(box) {
+			// console.log(box);
+		});
+
+		Sandbox('ajax', 'dom', function(box) {
+			// console.log(box);
+		});
+
+		// 可以使用通配符'*'参数表示使用所有模块，并且当没有传递任何模块时，默认为'*'
+		Sandbox('*', function(box) {
+			// ...
+		});
+		Sandbox(function(box) {
+			// ...
+		});
+
+		// 多次实例化沙箱对象，还可以将一个模块嵌入到另一个模块中，两者之间不会相互干扰
+		Sandbox('dom', 'event', function(box) {
+			// 使用dom和event来运行
+			
+			Sandbox('ajax', function(box) {
+				// 另一个沙箱化的box对象
+				// 这里的box对象与函数外部的box不同
+				// 
+				// ...
+				// 使用ajax来处理
+				
+			});
+
+			// 这里没有ajax模块
+		});
+
+
+		// 添加模块
+		/**
+		 * Sandbox构造函数也是一个对象，因此可以向它添加一个名为modules的静态属性。
+		 * 该属性是包含键-值对的另一个的对象
+		 * 其中，这些键是模块的名字，而值则是实现每个模块的对应函数
+		 */
+		
+		Sandbox.modules = {};
+
+		Sandbox.modules.dom = function (box) {
+			box.getElement = function () {
+			};
+			box.getStyle = function () {
+			};
+			box.foo = "bar";
+		};
+
+		Sandbox.modules.event = function (box) {
+			box.attachEvent = function () {
+			};
+			box.detachEvent = function () {
+			};
+		};
+
+		Sandbox.modules.ajax = function (box) {
+			box.makeRequest = function () {
+			};
+			box.getResponse = function () {
+			};
+		};
+		
+
+
+		// 实现构造函数
+		function Sandbox () {
+			// 将参数转换成一个数组
+			var args = Array.prototype.slice.call(arguments),
+				callback = args.pop(),
+				// 模块可以作为一个数组传递，或作为单独的参数传递
+				modules = (args[0] && typeof args[0] === 'string') ? args : args[0];
+				
+
+			// 确保该函数作为构造函数被调用
+			if (!(this instanceof Sandbox)) {
+				return new Sandbox(modules, callback);
+			}
+
+			// 需要向this添加的属性
+			this.a = 1;
+			this.b = 2;
+
+			// 现在向该核心this对象添加模块
+			// 不指定模块名称或指定'*'都表示'使用所有模块'
+			if (!modules || modules === '*') {
+				modules = [];
+				for(var i in Sandbox.modules) {
+					if(Sandbox.modules.hasOwnProperty(i)){
+						modules.push(i);
+					}
+				}
+			}
+
+			// 初始化所需的模块
+			for (var i = 0, max = modules.length; i < max; i++) {
+				Sandbox.modules[modules[i]](this);
+			}
+
+			callback(this);
+		}
+
+		// 需要的任何原型属性
+		Sandbox.prototype = {
+			name: 'My Application',
+			version: '1.0',
+			getName: function() {
+				return this.name;
+			}
+		};
+
+	</script>
+</body>
+</html>

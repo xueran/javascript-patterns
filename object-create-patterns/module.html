@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Javascript patterns</title>
+</head>
+<body>
+	<script>
+		// title：模块模式
+		
+		var MYAPP = MYAPP || {};
+
+		MYAPP.namespace = function (ns_string) {
+			var parts = ns_string.split('.'),
+				parent = MYAPP,
+				i;
+
+			// 剥离最前面的全局变量
+			if (parts[0] === "MYAPP") {
+				parts = parts.slice(1);
+			}
+
+			for (i = 0; i < parts.length; i += 1) {
+				// 如果不存在，就创建一个属性
+				if (typeof parent[parts[i]] === "undefined") {
+					parent[parts[i]] = {};
+				}
+				parent = parent[parts[i]];
+			}
+			return parent;
+		};
+
+		MYAPP.namespace('MYAPP.utilities.Array');
+
+		MYAPP.utilities.array = (function () {
+			// 私有属性
+			var array_string = "[object Array]",
+					ops = Object.prototype.toString,
+
+					// 私有函数
+					inArray = function (haystack, needle) {
+						for (var i = 0, max = haystack.length; i < max; i += 1) {
+							if (haystack[i] === needle) {
+								return i;
+							}
+						}
+						return -1;
+					},
+					isArray = function (a) {
+						return ops.call(a) === array_string;
+					};
+			// var 变量定义结束
+
+			// 揭示公有API
+			return {
+				isArray:isArray,
+				indexOf:inArray
+			};
+		}());
+
+		// 创建构造函数
+		MYAPP.utilities.Array = (function () {
+				// 依赖
+				var uobj = MYAPP.utilities.object,
+					ulang = MYAPP.utilities.lang,
+
+					// 私有属性和方法
+					Constr;
+
+				// var 变量定义结束
+				// 可选的一次性初始化过程
+				// ...
+
+				// 公有API--构造函数
+				Constr = function (o) {
+					this.elements = this.toArray(o);
+				};
+				// 原型
+				Constr.prototype = {
+					constructor:MYAPP.utilities.Array,
+					version:"2.0",
+					toArray:function (obj) {
+						for (var i = 0, a = [], len = obj.length; i < len; i += 1) {
+							a[i] = obj[i];
+						}
+						return a;
+					}
+				};
+
+				// 返回构造函数
+				return Constr;
+			}());
+
+			// 使用新构造函数
+			var arr = new MYAPP.utilities.Array(obj);
+			
+	</script>
+</body>
+</html>
