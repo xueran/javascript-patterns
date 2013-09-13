@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>javascript patterns</title>
+</head>
+<body>
+	<script>
+		// title: 链式调用
+		
+		var obj = {
+			value:1,
+			increment:function () {
+				this.value += 1;
+				return this;
+			},
+			add:function (v) {
+				this.value += v;
+				return this;
+			},
+			shout:function () {
+				console.log(this.value);
+			}
+		};
+
+		obj.increment().add(3).shout(); // 5
+		
+	</script>	
+</body>
+</html>

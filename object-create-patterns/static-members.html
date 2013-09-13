@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Javascript patterns</title>
+</head>
+<body>
+	<script>
+	// title：静态成员
+
+	// 静态属性和方法也就是那些从一个实例到另外一个实例都不会发生改变的属性和方法
+	
+	// 公有静态成员
+	// 使用构造函数并且向其添加属性这种方式来表示静态成员
+	var Gadget = function() {};
+
+	// 静态方法
+	Gadget.isShiny = function() {
+		return 'you bet';
+	};
+
+	// 向该原型添加一个普通方法
+	Gadget.prototype.setPrice = function(price) {
+		this.price = price;
+	};
+
+	// 调用静态方法
+	console.log(Gadget.isShiny()); // you bet
+
+	// 创建一个实例并调用其方法
+	var iphone = new Gadget();
+	iphone.setPrice(500);
+
+	console.log(typeof Gadget.setPrice);	// undefined
+	console.log(typeof iphone.isShiny);	//undefined
+
+	Gadget.prototype.isShiny = Gadget.isShiny;
+	console.log(iphone.isShiny());	// you bet
+	/**
+	 * 这种情况下，使用this要特别注意，当执行Gadget.isShiny()时，isShiny()内部的this指向Gadget
+	 * 当执行iphone.isShiny()时，this指向iphone
+	 */
+
+
+	 // 构造函数
+	 var Gadget = function(price) {
+	 	this.price = price;
+	 };
+
+	 // 静态方法
+	 Gadget.isShiny = function() {
+	 	// 这种方法总是可以运行
+	 	var msg = 'you bet';
+
+	 	if (this instanceof Gadget) {
+	 		msg += ', it costs $' +this.price + '!';
+	 	}
+	 	return msg;
+	 };
+
+	 Gadget.prototype.isShiny = function() {
+	 	return Gadget.isShiny.call(this);
+	 };
+
+	 // 测试静态方法调用
+	 Gadget.isShiny();	// yuo bet
+
+	 // 测试实例
+	 var a = new Gadget('499.99');
+	 a.isShiny();	// you bet, it costs $499.99!
+
+
+	 // 私有静态成员
+	 // 方法1
+	var Gadget = (function () {
+
+		// 静态变量/属性
+		var counter = 0;
+
+		// 返回
+		// 该构造函数新的实现
+		return function () {
+			console.log(counter += 1);
+		};
+	}()); // 立即执行
+
+	var g1 = new Gadget(); // logs 1
+	var g2 = new Gadget(); // logs 2
+	var g3 = new Gadget(); // logs 3
+
+	// 方法2
+	var Gadget = (function () {
+
+		// 静态变量/属性
+		var counter = 0,
+			NewGadget;
+
+		// 这将成为
+		// 新的构造函数的实现
+		NewGadget = function () {
+			counter += 1;
+		};
+
+		// 特权方法
+		NewGadget.prototype.getLastId = function () {
+			return counter;
+		};
+
+		// 覆盖该构造函数
+		return NewGadget;
+
+	}()); // execute immediately
+
+	var iphone = new Gadget();
+	iphone.getLastId(); // 1
+	var ipod = new Gadget();
+	ipod.getLastId(); // 2
+	var ipad = new Gadget();
+	ipad.getLastId(); // 3
+	
+	</script>
+</body>
+</html>

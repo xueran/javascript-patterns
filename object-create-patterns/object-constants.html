@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>javascript patterns</title>
+</head>
+<body>
+	<script>
+		// title: 对象常量
+		
+		var constant = (function () {
+			var constants = {},
+				ownProp = Object.prototype.hasOwnProperty,
+				allowed = {
+					string:1,
+					number:1,
+					boolean:1
+				},
+				prefix = (Math.random() + "_").slice(2);
+			return {
+				set:function (name, value) {
+					if (this.isDefined(name)) {
+						return false;
+					}
+					if (!ownProp.call(allowed, typeof value)) {
+						return false;
+					}
+					constants[prefix + name] = value;
+					return true;
+				},
+				isDefined:function (name) {
+					return ownProp.call(constants, prefix + name);
+				},
+				get:function (name) {
+					if (this.isDefined(name)) {
+						return constants[prefix + name];
+					}
+					return null;
+				}
+			};
+		}());
+
+		// 检查是否已经定义
+		console.log(constant.isDefined("maxwidth")); // false
+
+		// 定义
+		console.log(constant.set("maxwidth", 480)); // true
+
+		// 再次检查
+		console.log(constant.isDefined("maxwidth")); // true
+
+		// 试图重新定义
+		console.log(constant.set("maxwidth", 320)); // false
+
+		// 该值是否仍然保持不变
+		console.log(constant.get("maxwidth")); // 480
+
+	</script>
+</body>
+</html>
