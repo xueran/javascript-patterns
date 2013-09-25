@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>javascript patterns</title>
+</head>
+<body>
+	<script>
+		// title: 迭代器模式
+		
+		// 在迭代器模式中，通常有一个包含某种数据集合的对象
+		// 在迭代器模式中，对象需要提供一个next()方法，依次调用next必须返回下一个连续的元素
+		
+		while(element = agg.next()){
+			// 处理元素
+			console.log(element);
+		}
+
+		// hasNext()
+		while (agg.hasNext()) {
+			// 处理元素
+			console.log(agg.next());
+		}
+
+		var agg = (function() {
+			var index = 0,
+				data = [1, 2, 3, 4, 5],
+				length = data.length;
+
+			return {
+
+				next:function () {
+					var element;
+					if (!this.hasNext()) {
+						return null;
+					}
+					element = data[index];
+					index = index + 2;
+					return element;
+				},
+
+				hasNext:function () {
+					return index < length;
+				},
+
+				rewind:function () {	// 重置指针到初始位置
+					index = 0;
+				},
+
+				current:function () {	// 返回当前元素
+					return data[index];
+				}
+
+			};
+		}());
+
+		while (agg.hasNext()) {
+			console.log(agg.next());
+		}
+
+		// 回退
+		agg.rewind();
+		console.log(agg.current()); // 1
+
+	</script>
+</body>
+</html>

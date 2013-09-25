@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>javascript patterns</title>
+</head>
+<body>
+	<script>
+		// title: 单例模式		
+		// 单体模式的思想在于保证一个类只有一个实例
+		
+
+		// 通常用对象字面量创建一个简单的对象就是一个单体的例子		
+		var obj = {
+			myprop: 'my value'
+		};
+		var obj2 = {
+			myprop: 'my value'
+		};
+
+		obj === obj2;	// false
+		obj == obj2;	// false
+
+
+		// 使用new操作符
+		
+		// 1.静态属性中的实例
+		function Universe () {
+
+			if (typeof Universe.instance === 'object') {
+				return Universe.instance;
+			}
+
+			this.start_time = 0;
+			this.bang = 'Big';
+
+			// 缓存
+			Universe.instance = this;
+
+			// 隐式返回
+			// return this;
+		}
+
+		// 测试
+		var uni = new Universe();
+		var uni2 = new Universe();
+		uni === uni2;	// true
+
+		// 2.闭包中的实例
+		function Universe() {
+
+			// 缓存实例
+			var instance = this;
+
+			// 正常运行
+			this.start_time = 0;
+			this.bang = "Big";
+
+			// 重写该构造函数
+			Universe = function () {
+				return instance;
+			};
+		}
+
+		// 测试
+		var uni = new Universe();
+		var uni2 = new Universe();
+		uni === uni2;	// true
+
+		// 问题
+		// 向原型添加属性
+		Universe.prototype.nothing = true;
+
+		var uni = new Universe();
+
+		// 在创建初始化对象之后
+		// 再次向该原型添加属性
+		Universe.prototype.everything = true;
+
+		var uni2 = new Universe();
+
+		// 测试
+		// 仅有最初的原型链接到对象上
+		uni.nothing; // true
+		uni2.nothing; // true
+		uni.everything; // undefined
+		uni2.everything; // undefined
+
+		// 结果看上去是正确的
+		uni.constructor.name; // "Universe"
+
+		// 但是这很奇怪
+		uni.constructor === Universe; // false
+
+		// uni.constructor仍然指向的是原始的构造的函数，而不是重新定义的那个构造函数
+		
+		// 调整
+		function Universe() {
+
+			// 缓存实例
+			var instance;
+
+			// 重写构造函数
+			Universe = function Universe() {
+				return instance;
+			};
+
+			// 保留原型属性
+			Universe.prototype = this;
+
+			// 实例
+			instance = new Universe();
+
+			// 重置构造函数指针
+			instance.constructor = Universe;
+
+			// 所有功能
+			instance.start_time = 0;
+			instance.bang = "Big";
+
+			return instance;
+		}
+
+
+		// 3.及时函数
+		var Universe;
+		(function() {
+			var instance;
+
+			Universe = function Universe () {
+				
+				if (instance) {
+					return instance;
+				}
+
+				instance = this;
+
+				this.start_time = 0;
+				this.bang = 'Big';
+
+			};
+
+		}());
+		
+	</script>
+</body>
+</html>

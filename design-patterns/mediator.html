@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>javascript patterns</title>
+	<style>
+    #results {text-align: center; font-size: 100px;}
+    strong {color: blue;}
+    </style> 
+</head>
+<body>
+	<p>Player one press "1", player two press "0". Go! (you have half a minute...)</p>
+	<div id="results"></div>
+	<script>
+		// title: 中介者模式
+		
+		/**
+		 * 当多个对象紧密耦合时，很难在改变单个对象的同时不影响其他多个对象
+		 * 中介者模式缓解了该问题并促进形成松耦合
+		 * 独立的对象之间不直接通信，而是通过mediator对象
+		 */
+		
+		 function Player (name) {
+		 	this.points = 0;
+		 	this.name = name;
+		 }
+		 Player.prototype.play = function() {
+		 	this.points += 1;
+		 	mediator.played();
+		 };
+		 var scoreboard = {
+
+		 	element: document.getElementById('results'),
+
+		 	update: function(score) {
+		 		var i, msg = '';
+		 		for(i in score){
+		 			if (score.hasOwnProperty(i)) {
+		 				msg += '<p><strong>' + i + '</strong>:';
+		 				msg += score[i];
+		 				msg += '</p>'
+		 			}
+		 		}
+		 		this.element.innerHTML = msg;
+		 	}
+		 };
+
+		 var mediator = {
+		 	players: {},
+
+		 	setup: function() {
+		 		var players = this.players;
+		 		players.home = new Player('home');
+		 		players.guest = new Player('guest');
+
+		 	},
+
+		 	played: function() {
+		 		var players = this.players,
+		 			score = {
+		 				home: players.home.points,
+		 				guest: players.guest.points
+		 			};
+		 		scoreboard.update(score);
+		 	},
+
+		 	keypress: function(e) {
+		 		e = e || window.event;
+		 		if (e.which === 49) {	// 按键1
+		 			mediator.players.home.play();
+		 			return;
+		 		}
+		 		if (e.which === 48) {	// 按键0
+		 			mediator.players.guest.play();
+		 			return;
+		 		}
+		 	}
+		 };
+
+		 mediator.setup();
+		 window.onkeypress = mediator.keypress;
+
+		 setTimeout(function() {
+		 	window.onkeypress = null;
+		 	alert('Game over')
+		 },30000);
+
+	</script>
+</body>
+</html>
